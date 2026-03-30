@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Voices — The Waffle Villa</title>
+  <meta name="description" content="Read what our guests have to say about their experience at The Waffle Villa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #C9922A;
+      --gold-light: #E8B84B;
+      --gold-pale: #F5DFA0;
+      --brown: #1A0F05;
+      --brown-mid: #2D1A08;
+      --brown-light: #4A2E10;
+      --cream: #F9F0DC;
+      --red: #C0392B;
+      --white: #FEFEFE;
+      --focus-ring: #E8B84B;
+    }
+    :focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+    body {
+      background: var(--brown);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: -100; opacity: 0.4;
+    }
+    
+    /* Top Nav */
+    .top-bar {
+      position: sticky; top: 0;
+      background: rgba(26, 15, 5, 0.95);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid rgba(201,146,42,0.15);
+      z-index: 100;
+    }
+    .brand {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      font-weight: 700; color: var(--gold-light); text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+    .back-link {
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none; opacity: 0.8;
+      transition: opacity 0.3s, color 0.3s;
+    }
+    .back-link:hover { opacity: 1; color: var(--gold-light); }
+
+    /* Hero */
+    .hero { text-align: center; padding: 6rem 1.5rem 4rem; }
+    .hero-label {
+      font-size: 0.7rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700; color: var(--gold-light); margin-bottom: 1rem;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
+      font-style: italic; color: rgba(249,240,220,0.7);
+    }
+
+    /* Grid */
+    .reviews-container {
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem 8rem;
+    }
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    .empty-state {
+      grid-column: 1 / -1; text-align: center; padding: 4rem 1rem;
+      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
+      font-style: italic; color: rgba(249, 240, 220, 0.5);
+    }
+    
+    .review-card {
+      background: var(--brown-mid);
+      border: 1px solid rgba(201,146,42,0.2);
+      padding: 2rem; border-radius: 2px;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201,146,42,0.5);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .card-stars { color: var(--gold-light); font-size: 1.2rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    .card-text { font-size: 0.95rem; line-height: 1.7; color: rgba(249, 240, 220, 0.85); margin-bottom: 1.5rem; flex-grow: 1; }
+    .card-footer { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(249,240,220,0.05); padding-top: 1rem; }
+    .card-name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold-pale); font-size: 1.05rem; }
+    .card-date { font-size: 0.75rem; color: rgba(249,240,220,0.4); }
+
+    /* FAB */
+    .fab {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--brown);
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 1rem 2rem; border-radius: 50px; border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(201,146,42,0.4);
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s; z-index: 90;
+    }
+    .fab:hover { background: var(--gold-light); transform: translateX(-50%) translateY(-2px); box-shadow: 0 6px 25px rgba(201,146,42,0.5); }
+    .fab:active { transform: translateX(-50%) translateY(0); }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(17, 10, 3, 0.9);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s; padding: 1rem;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    
+    .modal-content {
+      background: var(--brown-mid); border: 1px solid rgba(201,146,42,0.3);
+      padding: 3rem 2.5rem; width: 100%; max-width: 500px;
+      position: relative; transform: translateY(20px); transition: transform 0.3s;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-overlay.open .modal-content { transform: translateY(0); }
+    
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: transparent; border: none; color: var(--cream);
+      font-size: 1.8rem; line-height: 1; cursor: pointer; opacity: 0.5;
+      transition: opacity 0.3s, color 0.3s; padding: 0.5rem;
+    }
+    .modal-close:hover { opacity: 1; color: var(--gold-light); }
+    
+    .modal-title {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem;
+      color: var(--gold-light); margin-bottom: 2rem; text-align: center;
+    }
+
+    /* Form Elements */
+    .form-group { margin-bottom: 1.5rem; position: relative; }
+    .form-label {
+      display: block; font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .form-input, .form-textarea {
+      width: 100%; background: var(--brown); border: 1px solid rgba(201,146,42,0.2);
+      color: var(--cream); font-family: 'DM Sans', sans-serif;
+      padding: 0.8rem 1rem; font-size: 0.95rem; transition: border-color 0.3s;
+    }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--gold-light); }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(249,240,220,0.3); }
+    
+    /* Counter */
+    .char-counter {
+      position: absolute; bottom: -1.2rem; right: 0;
+      font-size: 0.7rem; color: var(--gold); opacity: 0.8;
+      transition: color 0.3s;
+    }
+    .char-counter.error { color: var(--red); opacity: 1; }
+
+    /* Star Rating Input */
+    .star-group { display: flex; gap: 0.5rem; }
+    .star-btn {
+      background: none; border: none; font-size: 2rem;
+      color: rgba(201,146,42,0.3); cursor: pointer; padding: 0.2rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .star-btn:hover, .star-btn:focus-visible { transform: scale(1.1); }
+    .star-btn.active, .star-btn.hover-active { color: var(--gold-light); }
+    
+    .submit-btn {
+      width: 100%; background: var(--gold); color: var(--brown);
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; border: none;
+      padding: 1rem; cursor: pointer; margin-top: 1rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .submit-btn:hover { background: var(--gold-light); }
+    .submit-btn:active { transform: scale(0.98); }
+
+    /* Form Errors */
+    .error-msg {
+      display: none; color: var(--red); font-size: 0.75rem;
+      margin-top: 0.4rem; letter-spacing: 0.05em;
+    }
+    .has-error .error-msg { display: block; }
+    .has-error .form-input, .has-error .form-textarea, .has-error .star-group { border-color: var(--red); }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.4s ease-in-out; }
+
+    /* Thank You Modal Elements */
+    .ty-stars { text-align: center; color: var(--gold-light); font-size: 1.5rem; margin-bottom: 1.5rem; letter-spacing: 4px; }
+    .ty-stars span { opacity: 0; transform: translateY(10px); display: inline-block; }
+    @keyframes starFade { to { opacity: 1; transform: translateY(0); } }
+    
+    .ty-msg { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; color: rgba(249,240,220,0.85); line-height: 1.6; text-align: center; margin-bottom: 2rem; }
+    .ty-sig { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--gold); text-align: right; margin-bottom: 2rem; }
+    
+    .ty-close-btn {
+      width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--gold);
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 1rem; cursor: pointer; transition: background 0.3s, color 0.3s;
+    }
+    .ty-close-btn:hover { background: rgba(201,146,42,0.1); color: var(--gold-light); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 4rem 1rem 3rem; }
+      .hero-title { font-size: 2.2rem; }
+      .modal-content { padding: 2.5rem 1.5rem; }
+      .star-btn { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <a href="index.html" class="brand" aria-label="Home">The Waffle Villa</a>
+    <a href="index.html" class="back-link">← Back</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="hero-label">Customer Voices</p>
+      <h1 class="hero-title">What Our Guests Say</h1>
+      <p class="hero-sub">Real words from real minimalists.</p> <!-- Will style sub -->
+    </section>
+
+    <div class="reviews-container">
+      <div class="reviews-grid" id="reviews-grid" aria-live="polite">
+        <!-- Reviews injected here -->
+      </div>
+    </div>
+  </main>
+
+  <button class="fab" id="leave-feedback-btn" aria-label="Leave Feedback">✍ Leave Feedback</button>
+
+  <!-- Feedback Modal -->
+  <div class="modal-overlay" id="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close dialog" data-close="feedback-modal">×</button>
+      <h2 class="modal-title" id="modal-title">Share Your Experience</h2>
+      
+      <form id="feedback-form" novalidate>
+        <!-- Name -->
+        <div class="form-group" id="group-name">
+          <label class="form-label" for="fb-name">Your Name</label>
+          <input type="text" id="fb-name" class="form-input" placeholder="e.g. Rahul Sharma" required />
+          <div class="error-msg">Please enter your name</div>
+        </div>
+        
+        <!-- Rating -->
+        <div class="form-group" id="group-rating">
+          <label class="form-label">Your Rating</label>
+          <div class="star-group" role="radiogroup" aria-label="Star Rating" aria-required="true">
+            <button type="button" class="star-btn" role="radio" aria-checked="false" data-val="1">☆</button>
+            <button type="button" class="star-btn" role="radio" aria-checked="false" data-val="2">☆</button>
+            <button type="button" class="star-btn" role="radio" aria-checked="false" data-val="3">☆</button>
+            <button type="button" class="star-btn" role="radio" aria-checked="false" data-val="4">☆</button>
+            <button type="button" class="star-btn" role="radio" aria-checked="false" data-val="5">☆</button>
+          </div>
+          <input type="hidden" id="fb-rating" value="" required />
+          <div class="error-msg">Please select a rating</div>
+        </div>
+
+        <!-- Text -->
+        <div class="form-group" id="group-text">
+          <label class="form-label" for="fb-text">Your Experience</label>
+          <textarea id="fb-text" class="form-textarea" placeholder="Tell us about your visit, your favourite item, what made your experience special…" rows="4" required minlength="10" maxlength="500"></textarea>
+          <div class="char-counter" id="char-counter" aria-live="polite">0 / 500</div>
+          <div class="error-msg" id="text-error">Please enter at least 10 characters</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Feedback</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div class="modal-overlay" id="thank-you-modal" role="dialog" aria-modal="true" aria-labelledby="ty-title">
+    <div class="modal-content" style="max-width: 450px;">
+      <h2 class="modal-title" id="ty-title" style="display:none;">Thank You</h2>
+      <div class="ty-stars" aria-hidden="true" id="ty-stars-container">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <div class="ty-msg">
+        <p style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: normal; font-weight: 700; color: var(--gold-light); margin-bottom: 1rem;" id="ty-name-display">Thank You!</p>
+        <p>We are so grateful you visited The Waffle Villa.</p>
+        <p style="margin-top:0.8rem;">Your feedback means the world to us — it helps us craft every waffle, every shake, and every moment with even more love and care. We hope to see you again very soon.</p>
+      </div>
+      <p class="ty-sig">— The Waffle Villa, Washim 🧇</p>
+      <button class="ty-close-btn" data-close="thank-you-modal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'wv_reviews';
+
+    // Elements
+    const grid = document.getElementById('reviews-grid');
+    const fbModal = document.getElementById('feedback-modal');
+    const tyModal = document.getElementById('thank-you-modal');
+    const btnOpen = document.getElementById('leave-feedback-btn');
+    const form = document.getElementById('feedback-form');
+    const fbRatingInput = document.getElementById('fb-rating');
+    const starBtns = document.querySelectorAll('.star-btn');
+    const txtArea = document.getElementById('fb-text');
+    const counter = document.getElementById('char-counter');
+    const textError = document.getElementById('text-error');
+
+    // Init UI
+    loadReviews();
+
+    // Modal Logic
+    function openModal(modal) {
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      // Trap focus setup
+      const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length) focusable[0].focus();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('open');
+      if (!document.querySelector('.modal-overlay.open')) {
+        document.body.style.overflow = '';
+      }
+      if (modalId === 'feedback-modal') form.reset();
+      resetStars();
+    }
+
+    btnOpen.addEventListener('click', () => openModal(fbModal));
+    
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', (e) => closeModal(e.target.dataset.close));
+    });
+
+    // Submitting unlocks re-render, so bind close of TY modal to re-render
+    document.querySelector('.ty-close-btn').addEventListener('click', loadReviews);
+
+    // Escape handles closing topmost overlay
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (tyModal.classList.contains('open')) closeModal('thank-you-modal');
+        else if (fbModal.classList.contains('open')) closeModal('feedback-modal');
+      }
+    });
+
+    // Focus Trapping globally for .open modals
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Tab') return;
+      const openModal = document.querySelector('.modal-overlay.open');
+      if (!openModal) return;
+      
+      const focusableElements = openModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Star Rating Logic
+    function resetStars() {
+      starBtns.forEach(btn => {
+        btn.textContent = '☆';
+        btn.classList.remove('active', 'hover-active');
+        btn.setAttribute('aria-checked', 'false');
+      });
+      fbRatingInput.value = '';
+    }
+
+    function renderStarsUI(val, isHover) {
+      starBtns.forEach(btn => {
+        const bVal = parseInt(btn.dataset.val);
+        if (bVal <= val) {
+          btn.textContent = '★';
+          btn.classList.add(isHover ? 'hover-active' : 'active');
+        } else {
+          btn.textContent = '☆';
+          btn.classList.remove('hover-active');
+          if (!isHover || bVal > (fbRatingInput.value || 0)) {
+            btn.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    starBtns.forEach(btn => {
+      btn.addEventListener('mouseenter', e => renderStarsUI(e.target.dataset.val, true));
+      btn.addEventListener('mouseleave', () => renderStarsUI(fbRatingInput.value || 0, false));
+      btn.addEventListener('click', e => {
+        const val = e.target.dataset.val;
+        fbRatingInput.value = val;
+        starBtns.forEach(b => b.setAttribute('aria-checked', b.dataset.val === val));
+        renderStarsUI(val, false);
+      });
+      // Keyboard interaction (Space/Enter natively click the button, so click listener covers it)
+    });
+
+    // Textarea counter
+    txtArea.addEventListener('input', () => {
+      const len = txtArea.value.length;
+      counter.textContent = `${len} / 500`;
+      if (len > 500) counter.classList.add('error');
+      else counter.classList.remove('error');
+    });
+
+    // Form Submission
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      
+      // Clear errors
+      document.querySelectorAll('.has-error').forEach(el => {
+        el.classList.remove('has-error', 'shake');
+      });
+
+      let isValid = true;
+
+      const nameInput = document.getElementById('fb-name');
+      if (!nameInput.value.trim()) {
+        showError('group-name');
+        isValid = false;
+      }
+
+      if (!fbRatingInput.value) {
+        showError('group-rating');
+        isValid = false;
+      }
+
+      const txtLen = txtArea.value.trim().length;
+      if (txtLen < 10 || txtLen > 500) {
+        textError.textContent = txtLen > 500 ? "Maximum 500 characters allowed" : "Please enter at least 10 characters";
+        showError('group-text');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      // Save to localStorage
+      const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      reviews.push({
+        name: nameInput.value.trim(),
+        rating: parseInt(fbRatingInput.value),
+        text: txtArea.value.trim(),
+        date: new Date().toISOString()
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+
+      // Show Thank You
+      const submittedName = nameInput.value.trim();
+      closeModal('feedback-modal');
+      
+      document.getElementById('ty-name-display').textContent = `Thank You, ${submittedName}!`;
+      openModal(tyModal);
+      
+      // Animate TY stars
+      const tyStars = document.querySelectorAll('.ty-stars span');
+      tyStars.forEach(s => { s.style.animation = 'none'; s.style.opacity = '0'; });
+      setTimeout(() => {
+        tyStars.forEach((s, idx) => {
+          s.style.animation = `starFade 0.4s ease forwards ${idx * 0.08}s`;
+        });
+      }, 50);
+    });
+
+    function showError(groupId) {
+      const g = document.getElementById(groupId);
+      g.classList.add('has-error');
+      // Force reflow to replay shake
+      void g.offsetWidth;
+      g.classList.add('shake');
+    }
+
+    // Grid Rendering
+    function loadReviews() {
+      const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      grid.innerHTML = '';
+
+      if (reviews.length === 0) {
+        grid.innerHTML = '<div class="empty-state">Be the first to leave your mark.</div>';
+        return;
+      }
+
+      // Sort newest first
+      reviews.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      reviews.forEach(rv => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        
+        let starsHTML = '';
+        for(let i=1; i<=5; i++) starsHTML += (i <= rv.rating) ? '★' : '☆';
+
+        const dDate = new Date(rv.date);
+        const dateStr = dDate.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        card.innerHTML = `
+          <div class="card-stars" aria-label="Rating: ${rv.rating} out of 5">${starsHTML}</div>
+          <p class="card-text">"${escapeHTML(rv.text)}"</p>
+          <div class="card-footer">
+            <span class="card-name">${escapeHTML(rv.name)}</span>
+            <span class="card-date">${dateStr}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function escapeHTML(str) {
+      if(!str) return '';
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+          }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
